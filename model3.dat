@@ -1,0 +1,11 @@
+## Example configuration file
+
+# Save simulation results in file
+option savefile model3.save
+print 
+
+# Specify that jacobian is provided as a dense matrix
+option mtype userdense
+
+# Be sure to end this file with a comment line
+# endfile

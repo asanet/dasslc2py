@@ -1,0 +1,1 @@
+gcc -o demo.out demo.c dasslc.c -lm

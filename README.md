@@ -23,7 +23,7 @@ archlinux: $ sudo pacman -S python2 python2-numpy python2-matplotlib
 
 * **OR** Python 3 also with numpy and (optionally) matplotlib
 ```
-archlinux: $ sudo pacman -S python3 python3-numpy python3-matplotlib
+archlinux: $ sudo pacman -S python python-numpy python-matplotlib
 ```
 
     OBS: matplotlib is needed by the **dasslc_example.py** file

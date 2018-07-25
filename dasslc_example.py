@@ -1,7 +1,7 @@
 #########################################################################
 #                                                                       #
 #   This is a template for the dasslc module in Python.                 #
-#   Use it and modify at free as you wish.                              #
+#   Use it and modify as you wish.                                      #
 #                                                                       #
 #   Author: Ataide Neto                                                 #
 #   email:ataide@peq.coppe.ufrj.br                                      #
@@ -271,7 +271,6 @@ plt.legend(["x","y","vx","vy","mu"])
 
 ### Solve model4 (uncomment if sparse was compiled)
 
-"""
 t0 = np.linspace(0,1,15)
 y0 = np.ones(Ns)
 yp0 = -y0
@@ -307,7 +306,6 @@ plt.plot(2,toc2,'o')
 plt.ylabel('Time (s)')
 plt.title('Model4 Dense vs. Sparse performance comparison')
 plt.legend(["Dense = %0.2f s" % toc,"Sparse = %0.2f s" % toc1,"Jac Sparse = %0.2f s" % toc2])
-"""
 
 ## Show all figures
 plt.show()

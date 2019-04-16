@@ -6,11 +6,11 @@
 #   Author: Ataide Neto                                                 #
 #   email:ataide@peq.coppe.ufrj.br                                      #
 #   Universidade Federal do Rio de Janeiro                              #
-#   Version: 0.1-5                                                      #
+#   Version: 0.1-6                                                      #
 #                                                                       #
 #########################################################################
 
-#t,y,yp = dasslc.solve(resfun,tspan,y0,yp0,rpar,rtol,atol,idx,ipfile,jac)
+#t,y,yp = dasslc.solve(resfun,tspan,y0,yp0,rpar,rtol,atol,idx,ipfile,jac,display)
 
 ## Import the modules
 import dasslc, time
@@ -259,7 +259,7 @@ def jac_pend(t,y,yp,cj,par):
 
 # if passing the jacobian, the input file
 # must be properly configured. See model3.dat file
-t,y,yp = dasslc.solve(model3,t0,y0,yp0,par,rtol,atol,index,"model3.dat",jac_pend)
+t,y,yp = dasslc.solve(model3,t0,y0,yp0,par,rtol,atol,index,"model3.dat",jac_pend,display)
 
 # Plot results
 plt.figure(6)
@@ -271,6 +271,7 @@ plt.legend(["x","y","vx","vy","mu"])
 
 ### Solve model4 (uncomment if sparse was compiled)
 
+"""
 t0 = np.linspace(0,1,15)
 y0 = np.ones(Ns)
 yp0 = -y0
@@ -306,6 +307,7 @@ plt.plot(2,toc2,'o')
 plt.ylabel('Time (s)')
 plt.title('Model4 Dense vs. Sparse performance comparison')
 plt.legend(["Dense = %0.2f s" % toc,"Sparse = %0.2f s" % toc1,"Jac Sparse = %0.2f s" % toc2])
+"""
 
 ## Show all figures
 plt.show()

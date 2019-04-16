@@ -7,7 +7,7 @@
 #   Author: Ataide Neto                                           #
 #   email: ataide@peq.coppe.ufrj.br                               #
 #   Universidade Federal do Rio de Janeiro                        #
-#   Version: 0.1-5                                                #
+#   Version: 0.1-6                                                #
 #                                                                 #
 ###################################################################
 
@@ -24,7 +24,7 @@ else:
 
 setup(
     name = 'Dasslc2py',
-    version = '0.1-5',
+    version = '0.1-6',
     license = 'MIT',
     author = 'ataide@peq.coppe.ufrj.br',
     ext_modules=[

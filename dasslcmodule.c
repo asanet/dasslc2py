@@ -6,7 +6,7 @@
 #   Author: Ataide Neto                                            #
 #   email: ataide@peq.coppe.ufrj.br                                #
 #   Universidade Federal do Rio de Janeiro                         #
-#   Version: 0.1-5                                                 #
+#   Version: 0.1-6                                                 #
 #                                                                  #
 ##################################################################*/
 
@@ -18,6 +18,7 @@
  * v0.1-3 Added: steady state and sparse algebra support
  * v0.1-4 Added: user-defined jacobian support (sparse)
  * v0.1-5 Fixed: sparse algebra compilation
+ * v0.1-6 Added: display optional argument
  */
 
 #include <Python.h>
@@ -59,7 +60,7 @@ static PyObject *pyjac = NULL;       //The Python jacobian function
         PyModuleDef_HEAD_INIT,
         "dasslc",     // module name
         NULL,         // module documentation
-        -1,           // size of per-interpreter state of the module,
+        4096,           // size of per-interpreter state of the module,
                       // or -1 if the module keeps state in global variables
         dasslcMethods //Methods
     };
@@ -87,7 +88,7 @@ static PyObject *pyjac = NULL;       //The Python jacobian function
 
 // The function declaration
 static PyObject* dasslc_solve(PyObject *self, PyObject *args){
-    //python call: dasslc.solve(resfun, tspan, y0, yp0, rpar, rtol, atol, index, inputfile, jac)
+    //python call: dasslc.solve(resfun, tspan, y0, yp0, rpar, rtol, atol, index, inputfile, jac, display)
 
     // The memory allocation
     int ntp = -1, ntp2 = -1, neq = -1, ndr = -1, idxnum = -1;
@@ -100,6 +101,7 @@ static PyObject* dasslc_solve(PyObject *self, PyObject *args){
     char *inputfile = NULL;
     PTR_ROOT root;
     BOOL err = 0;
+    int display = 1;
 
     // The python inputs and outputs
     // >> mandatory:
@@ -109,8 +111,8 @@ static PyObject* dasslc_solve(PyObject *self, PyObject *args){
     double atol = 1e-10, rtol = 1e-8; 
 
     // Parse inputs
-    if (!PyArg_ParseTuple(args, "OOO|OOddOzO", &resfun_obj, &t_obj, &y_obj,
-                          &yp_obj, &rpar_obj, &rtol, &atol, &idx_obj, &inputfile, &jac_obj))
+    if (!PyArg_ParseTuple(args, "OOO|OOddOzOi", &resfun_obj, &t_obj, &y_obj,
+                          &yp_obj, &rpar_obj, &rtol, &atol, &idx_obj, &inputfile, &jac_obj, &display))
         return NULL;
 
     // Interpret the input objects as numpy arrays.
@@ -278,7 +280,7 @@ static PyObject* dasslc_solve(PyObject *self, PyObject *args){
         return NULL;
     }else if (!inputfile){
         inputfile = "?";
-        if (jac_obj)
+        if (jac_obj && jac_obj != Py_None)
             PyErr_WarnEx(PyExc_RuntimeWarning,
                          "Ignoring provided jacobian because inputfile is not properly configured.",
                          1);
@@ -383,7 +385,8 @@ static PyObject* dasslc_solve(PyObject *self, PyObject *args){
     }
 
     // Print dasslc output log
-    daStat (root.savefile, &root);
+    if (display)
+        daStat(root.savefile, &root);
 
     // Clean Up
     FREEALL();

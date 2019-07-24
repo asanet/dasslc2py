@@ -17,8 +17,7 @@ import dasslc, time
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Sparse system size
-Ns = 5000
+SPARSE = False # Change it to True if sparse was compiled
 
 ### Defining the residual functions 
 
@@ -80,14 +79,6 @@ def model3(t,y,yp,par): #------- The parameter may be a whole class
         ires = -1
 
     return res, ires
-
-def model4(t,y,yp): #------------- A huge sparse system
-    res = np.empty(Ns)
-    #for i in range(0,Ns): #------ Avoid using for-loops 
-    #   res[i] = yp[i] + y[i]      in python at all cost
-    res = yp + y
-    return res, 0
-
 
 ### Solve model0 
 
@@ -259,6 +250,7 @@ def jac_pend(t,y,yp,cj,par):
 
 # if passing the jacobian, the input file
 # must be properly configured. See model3.dat file
+display = False
 t,y,yp = dasslc.solve(model3,t0,y0,yp0,par,rtol,atol,index,"model3.dat",jac_pend,display)
 
 # Plot results
@@ -269,45 +261,52 @@ plt.xlabel('time')
 plt.title('Model3 Solution (with jacobian)')
 plt.legend(["x","y","vx","vy","mu"])
 
-### Solve model4 (uncomment if sparse was compiled)
 
-"""
-t0 = np.linspace(0,1,15)
-y0 = np.ones(Ns)
-yp0 = -y0
+if SPARSE:
+    
+    def model4(t,y,yp): #------------- A huge sparse system
+        res = np.empty(Ns)
+        #for i in range(0,Ns): #------ Avoid using for-loops 
+        #   res[i] = yp[i] + y[i]      in python at all cost
+        res = yp + y
+        return res, 0
 
-#with dense algebra
-tic = time.time()
-t, y, _ = dasslc.solve(model4,t0,y0,None,None,1e-6,1e-8)
-toc = time.time() - tic
+    Ns = 5000
+    t0 = np.linspace(0,1,15)
+    y0 = np.ones(Ns)
+    yp0 = -y0
 
-#with sparse algebra (uncomment if sparse was compiled)
+    #with dense algebra
+    tic = time.time()
+    t, y, _ = dasslc.solve(model4,t0,y0,None,None,1e-6,1e-8)
+    toc = time.time() - tic
 
-tic = time.time()
-t1, y1, _ = dasslc.solve(model4,t0,y0,None,None,1e-6,1e-8,None,"model4.dat")
-toc1 = time.time() - tic
+    #with sparse algebra
 
-#with sparse algebra and jacobian supplied
-def jacSparse(t,y,yp,cj): #---------------- The jacobian function
-    J = np.eye(Ns,Ns) #-------------------- Just an eye matrix
-    J = J + cj*J #------------------------- The true jacobian (iteration matrix)
-    i = range(0,Ns) #---------------------- The rows list
-    j = range(0,Ns) #---------------------- The columns list
-    ires = 0
-    return J, ires, i, j
+    tic = time.time()
+    t1, y1, _ = dasslc.solve(model4,t0,y0,None,None,1e-6,1e-8,None,"model4.dat")
+    toc1 = time.time() - tic
 
-tic = time.time()
-t2, y2, _ = dasslc.solve(model4,t0,y0,None,None,1e-6,1e-8,None,"model4b.dat",jacSparse)
-toc2 = time.time() - tic
+    #with sparse algebra and jacobian supplied
+    def jacSparse(t,y,yp,cj): #---------------- The jacobian function
+        J = np.eye(Ns,Ns) #-------------------- Just an eye matrix
+        J = J + cj*J #------------------------- The true jacobian (iteration matrix)
+        i = range(0,Ns) #---------------------- The rows list
+        j = range(0,Ns) #---------------------- The columns list
+        ires = 0
+        return J, ires, i, j
 
-plt.figure(7)
-plt.plot(0,toc,'o')
-plt.plot(1,toc1,'o')
-plt.plot(2,toc2,'o')
-plt.ylabel('Time (s)')
-plt.title('Model4 Dense vs. Sparse performance comparison')
-plt.legend(["Dense = %0.2f s" % toc,"Sparse = %0.2f s" % toc1,"Jac Sparse = %0.2f s" % toc2])
-"""
+    tic = time.time()
+    t2, y2, _ = dasslc.solve(model4,t0,y0,None,None,1e-6,1e-8,None,"model4b.dat",jacSparse)
+    toc2 = time.time() - tic
+
+    plt.figure(7)
+    plt.plot(0,toc,'o')
+    plt.plot(1,toc1,'o')
+    plt.plot(2,toc2,'o')
+    plt.ylabel('Time (s)')
+    plt.title('Model4 Dense vs. Sparse performance comparison')
+    plt.legend(["Dense = %0.2f s" % toc,"Sparse = %0.2f s" % toc1,"Jac Sparse = %0.2f s" % toc2])
 
 ## Show all figures
 plt.show()

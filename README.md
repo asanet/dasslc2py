@@ -16,12 +16,7 @@ Dasslc2py/dasslc_example.py
 archlinux: $ sudo pacman -S gcc gcc-libs
 ```
 
-* Python 2 with numpy and (optionally) matlplotlib:
-```
-archlinux: $ sudo pacman -S python2 python2-numpy python2-matplotlib
-```
-
-* **OR** Python 3 also with numpy and (optionally) matplotlib
+Python 3 with numpy, pip and (optionally) matplotlib
 ```
 archlinux: $ sudo pacman -S python python-numpy python-matplotlib
 ```
@@ -43,11 +38,8 @@ $ python setup.py build_ext --inplace
 
 * Instead, if you want to install it along with your python distribution, run
 ```
-$ sudo python setup.py install
+$ sudo pip install .
 ```
-
-    OBS: if you have multiple versions of python installed, use python2 or python3 as you wish
-
 
 ## Author
 

@@ -11,8 +11,8 @@
 #                                                                 #
 ###################################################################
 
-from distutils.core import setup, Extension
-from numpy.distutils.misc_util import get_numpy_include_dirs
+from setuptools import setup, Extension
+import numpy
 import os
 
 if os.path.exists(os.path.join("sparse","lib","sparse.a")):
@@ -30,7 +30,7 @@ setup(
     ext_modules=[
         Extension("dasslc",
             sources = ["dasslcmodule.c",os.path.join("dasslc", "dasslc.c")],
-            include_dirs = get_numpy_include_dirs(),
+            include_dirs = [numpy.get_include()],
             define_macros = defineMacros,
             extra_objects = extraObjects,
             extra_compile_args = ["-O3"]

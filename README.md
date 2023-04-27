@@ -38,7 +38,7 @@ $ python setup.py build_ext --inplace
 
 * Instead, if you want to install it along with your python distribution, run
 ```
-$ sudo pip install .
+$ pip install .
 ```
 
 ## Author

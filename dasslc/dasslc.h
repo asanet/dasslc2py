@@ -544,11 +544,11 @@ extern REAL arGet_float (char *, int *, REAL, REAL, SET *);
 #ifndef DASSLC_H
 #  define DASSLC_H
 
-BOOL (*ujacFactor) (PTR_ROOT *);
-BOOL (*ujacSolve) (PTR_ROOT *, REAL *, REAL *);
-void (*ujacPrint) (PTR_ROOT *);
-void (*ujacFree) (PTR_ROOT *);
-BOOL (*user_init) (PTR_ROOT *);
+static BOOL (*ujacFactor) (PTR_ROOT *);
+static BOOL (*ujacSolve) (PTR_ROOT *, REAL *, REAL *);
+static void (*ujacPrint) (PTR_ROOT *);
+static void (*ujacFree) (PTR_ROOT *);
+static BOOL (*user_init) (PTR_ROOT *);
 #endif /* DASSLC_H */
 
 #ifdef __cplusplus
